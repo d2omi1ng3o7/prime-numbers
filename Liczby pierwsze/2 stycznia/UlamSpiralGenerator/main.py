@@ -3,11 +3,11 @@ from math import ceil
 import math
 
 
-def is_prime(n):
-    if n <= 2:
+def is_prime(number):
+    if number <= 2:
         return False
-    for i in range(2, int(math.sqrt(n)) + 1):
-        if n % i == 0:
+    for i in range(2, int(math.sqrt(number)) + 1):
+        if number % i == 0:
             return False
     return True
 
@@ -41,17 +41,33 @@ def boardGenarator(size):
     return ulamArray
 
 def diagonals(array, size):
-    diagonals = []
-    diretion = [0, 0]
-    for i in range(0, ceil(size/2)):
-        diretion[0] += -1
-        diretion[1] += 1
+    diagonals = {}
+    lenghtDiogonal = ceil(size/2)
+
+    for x in range(0, lenghtDiogonal):
         diagonal = []
-        for j in range(0, ceil(size/2)):
-            diagonal.append(array[ceil(size/2)-1-j+diretion[0], j+diretion[1]])
-        diagonals.append(diagonal)
+        for y in range(0, lenghtDiogonal):
+            diagonal.append(array[lenghtDiogonal-1-y+x, y+x])
+
+        diagonals[f'{lenghtDiogonal-1-x}-{x}:{x}-{lenghtDiogonal-1+x}'] = diagonal
+
+    for x in range(0, lenghtDiogonal):
+        diagonal = []
+        for y in range(0, lenghtDiogonal):
+            diagonal.append(array[lenghtDiogonal-1+y-x, y+x])
+
+        diagonals[f'{lenghtDiogonal-1+x}-{x}:{size-1-x}-{lenghtDiogonal-1+x}'] = diagonal
 
     return diagonals
+
+def howPrimeNumbers(name, diogonal):
+    quantityPrimeNumbers = 0
+
+    for number in diogonal:
+        if is_prime(number):
+            quantityPrimeNumbers += 1
+
+    return name, quantityPrimeNumbers
 
 
 if __name__ == '__main__':
@@ -62,7 +78,7 @@ if __name__ == '__main__':
     largest = ulamArray[size-1, size-1]
     largestLenght = int(len(str(largest)))
 
-    diagonals = diagonals(ulamArray, size)
+    diagonalsArray = diagonals(ulamArray, size)
 
     for i in range(size):
         for j in range(size):
@@ -81,6 +97,4 @@ if __name__ == '__main__':
                 print()
                 x = 0
 
-    print(diagonals)
-
-
+    print(diagonalsArray)
